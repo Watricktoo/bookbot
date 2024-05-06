@@ -2,7 +2,17 @@ def main():
     book_contents = read_book()
     total_word_count = word_count(book_contents)
     letter_dict = count_letters(book_contents)
-    formated_output(total_word_count, letter_dict)
+    
+
+    letter_list_dict = []
+    for char in letter_dict:
+        new_dict = {"char": char, "count": letter_dict[char]}
+        letter_list_dict.append(new_dict)
+    
+    letter_list_dict.sort(reverse=True, key=sort_on)
+    
+    formatted_output(total_word_count,letter_list_dict)
+    
     #Displays contents to the console
     
 
@@ -25,13 +35,19 @@ def count_letters(full_text):
     lowercase_text = full_text.lower()
     for words in lowercase_text:
         for chars in words:
-            if chars in letter_count:
-                letter_count[chars] += 1
-            else: 
-                letter_count[chars] = 1
+            if chars.isalpha():
+                if chars in letter_count:
+                    letter_count[chars] += 1
+                else: 
+                    letter_count[chars] = 1
     return letter_count
-    
-def formated_output(word_total, letter_dictionary):
-    print(word_total)
-    print(letter_dictionary)
+
+def sort_on(letter_dictionary):
+    return letter_dictionary["count"]
+
+def formatted_output(word_count, letter_list_dict):
+    print(f"{word_count} words found in the document")
+    for dict in letter_list_dict:
+        print(f"The {dict['char']} character was found {dict['count']} times ")
+
 main()
